@@ -36,7 +36,9 @@ function App() {
   // Function to submit info when submit button is clicked
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const newFieldErrors = {};
+    // removes empty spaces and ensures no empty field before submitting
     Object.keys(fieldValues).forEach((fieldName) => {
       if (typeof fieldValues[fieldName] === "string") {
         if (fieldValues[fieldName].trim() === "") {
@@ -45,8 +47,7 @@ function App() {
       }
     });
 
-    // removes empty spaces and ensures no empty field before submitting
-    if (newFieldErrors && newFieldErrors.length > 0) {
+    if (Object.keys(newFieldErrors).length > 0) {
       Swal.fire(SwalMsgs.missingFormInfoGentle);
     } else {
       const newEntry = { fieldValues: fieldValues };

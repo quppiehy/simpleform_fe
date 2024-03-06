@@ -23,6 +23,10 @@ Technology used for front end:
 
 In the project directory, you can run:
 
+### `npm i`
+
+Installs required NPM packages.
+
 ### `npm start`
 
 Runs the app in the development mode.

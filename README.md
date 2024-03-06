@@ -1,9 +1,11 @@
-# Project Title
+# simpleform frontend
 
 This is the front end for the Simple Form (simpleform) project that was created as a simple exercise for an interview.
 
 Frontend: simpleform_fe
+
 Backend: simpleform_be
+
 Backend git repo @ [https://github.com/quppiehy/simpleform_be](https://github.com/quppiehy/simpleform_be)
 
 ## Project Description

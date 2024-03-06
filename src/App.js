@@ -65,14 +65,6 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    console.log("Name: ", fieldValues.name);
-  }, [fieldValues.name]);
-
-  useEffect(() => {
-    console.log("Message :", fieldValues.message);
-  }, [fieldValues.message]);
-
   return (
     <div className="App" style={{ margin: "20px" }}>
       <header className="App-header">

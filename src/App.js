@@ -4,9 +4,26 @@ import * as SwalMsgs from "./Utils/SwalMsgs";
 import axios from "axios";
 
 function App() {
-  const [fieldValues, setFieldValues] = useState({});
+  const [fieldValues, setFieldValues] = useState({ name: "", message: "" });
+  const [databaseData, setDatabaseData] = useState();
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Function to fetch data from endpoint
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/data`);
+      setDatabaseData(response.data.entries);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // Function to handle input change as user types
   const handleChange = (fieldName, value) => {
     setFieldValues((prevValues) => ({
       ...prevValues,
@@ -14,6 +31,7 @@ function App() {
     }));
   };
 
+  // Function to submit info when submit button is clicked
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newFieldErrors = {};
@@ -25,24 +43,20 @@ function App() {
       }
     });
 
+    // removes empty spaces and ensures no empty field before submitting
     if (newFieldErrors && newFieldErrors.length > 0) {
       Swal.fire(SwalMsgs.missingFormInfoGentle);
     } else {
       const newEntry = { fieldValues: fieldValues };
-
+      console.log(newEntry);
       try {
-        const addedEntry = await axios.put(
-          `${BACKEND_URL}/submit/`,
-          newEntry
-          // {
-          //   headers: {
-          //     Authorization: `Bearer ${currUser.accessToken}`,
-          //   },
-          // }
-        );
+        const addedEntry = await axios.put(`${BACKEND_URL}/submit`, newEntry);
         const newObject = addedEntry.data;
 
         console.log("Added Entry: ", newObject);
+        if (newObject) {
+          fetchData();
+        }
 
         Swal.fire(SwalMsgs.successPosting);
       } catch (error) {
@@ -60,12 +74,13 @@ function App() {
   }, [fieldValues.message]);
 
   return (
-    <div className="App">
+    <div className="App" style={{ margin: "20px" }}>
       <header className="App-header">
         <div>
           <h2>Simple Form</h2>
           <p>Please enter your name, message and submit.</p>
         </div>
+        {/* Form component */}
         <form onSubmit={handleSubmit}>
           <div>
             <label>
@@ -89,6 +104,23 @@ function App() {
           </div>
           <input type="submit" value="Submit" />
         </form>
+        {/* Display database.txt component */}
+        <div>
+          {databaseData ? (
+            <div>
+              <h2>Database Data:</h2>
+              <div>
+                {databaseData.map((entry, index) => (
+                  <p key={index}>{entry}</p>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div>
+              <p>There is currently no information on the database.</p>
+            </div>
+          )}
+        </div>
       </header>
     </div>
   );
